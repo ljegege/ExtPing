@@ -4,7 +4,7 @@ ExtPing
 main函数的PDL
 {
 	创建ICMP的socket
-	If 不成功
+	如果不成功
 	{
 	　　提示用户创建raw socket 需要超级权限
 	　　返回
@@ -12,7 +12,7 @@ main函数的PDL
 	配置socket的配置选项：缓冲区的大小
 
 	回收超级权限
-	检测参数个数是否正确，if不正确则提示用户本程序的使用方法
+	检测参数个数是否正确，如果不正确则提示用户本程序的使用方法
 
 	设置目的IP地址
 	{
@@ -23,7 +23,7 @@ main函数的PDL
 	调用main_loop循环发送和接收ICMP消息
 }
 
-main_loop函数的PDL
+main_loop(icmp socket ID， 目标主机地址)函数的PDL
 {
 	依次向目标主机发送TRANSMIT_TIME次数据
 	{
@@ -31,22 +31,22 @@ main_loop函数的PDL
 		调用sendPacket发送一次ICMP探测
 		定时等待目标主机的回答报文
 		{
-			if等待超时，则输出超时提示并返回则返回上一步，继续发送下一个ICMP探测
-			if在限定的时间内有数据返回，则调用recvPacket来获取返回的数据。
+			如果等待超时，则输出超时提示并返回则返回上一步，继续发送下一个ICMP探测
+			如果在限定的时间内有数据返回，则调用recvPacket来获取返回的数据。
 			{
-				if接收到的数据是当前等待的数据
+				如果接收到的数据是当前等待的数据
 				{
 					输出往返时间和TTL
 					返回上一步继续下一次的探测报文发送
 				}
-				if接收到的数据是之前的ICMP探测的回答报文则继续等待当前的回答报文
+				如果接收到的数据是之前的ICMP探测的回答报文则继续等待当前的回答报文
 			}
 		}
 	}			
 }
 
 
-sendPacket函数的PDL
+sendPacket(icmp socket ID， 目标主机地址)函数的PDL
 {
 	封装ICMP数据报的头部
 	{
@@ -61,17 +61,17 @@ sendPacket函数的PDL
 }
 
 
-recvPacket函数的PDL
+recvPacket(icmp socket ID， 目标主机地址，接收缓冲区地址，接收缓冲区大小)函数的PDL
 {
 	调用系统API获取ICMP回答报文
 	获取ip报文头的长度，并跳IP头。获取ICMP报文的开始地址
 	校验ICMP报文
 
-	判断报文的ID，if不与进程ID相等则返回0
+	判断报文的ID，如果不与进程ID相等则返回0
 
 	判断报文的序号
-	if为当前等待的报文，则返回1
-	if为之前的报文则返回2
+	如果为当前等待的报文，则返回1
+	如果为之前的报文则返回2
 }
 
 
